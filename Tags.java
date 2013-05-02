@@ -17,7 +17,10 @@ public class Tags {
 	private int[] color;
 	private Point[] points;
 
-
+	/*
+	 * Constructor for GET request
+	 */
+	
 	public Tags (int id, String name, String dateCreated,int[] color, Point[] points) {
 		this.id = id;
 		this.name = name;

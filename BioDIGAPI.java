@@ -49,6 +49,10 @@ public class BioDIGAPI {
 		return UriBuilder.fromUri(URL).build();
 	}
 	
+	/*
+	 * tags Methods
+	 */
+	
 	//Get request for TAG Api
 	public Tags getTAG (int id){		
 		requestpath = "tags";
@@ -56,7 +60,7 @@ public class BioDIGAPI {
 		params.add("id",Integer.toString(id));
 		
 		String info = (service.path(requestpath).queryParams(params).accept(mediatype).get(String.class));
-		System.out.println(info.toString());
+		//System.out.println(info.toString());
 		
 		Gson myGson = new Gson();
 		JsonParser jsonParser = new JsonParser();
@@ -66,29 +70,19 @@ public class BioDIGAPI {
 	}
 	
 	//Insert for TAG API
-	public void insertTAG (int tagGroupID,Point[] postPoint,Color Color,String name) {
+	public void insertTAG (TagQuery query) {
 		requestpath = "tags";
-			MultivaluedMap params = new MultivaluedMapImpl();
-			params.add("tagGroupId", Integer.toString(tagGroupID));
-			params.add("points", Arrays.toString(postPoint));
-			params.add("color", Color.toString());
-			params.add("name", name);
 			
-			ClientResponse response = service.path(requestpath).accept(mediatype).post(ClientResponse.class,params);
+			ClientResponse response = service.path(requestpath).accept(mediatype).post(ClientResponse.class,query.getQuery());
 			System.out.println(response.toString());
 		}
 	
 	//Edit Request for TAG API
-	public void editTAG (int tagID, int tagGroupID,Point[] postPoint,Color Color,String name) {
+	public void editTAG (int tagID, TagQuery query) {
 		requestpath = "tags";
-			MultivaluedMap params = new MultivaluedMapImpl();
-			params.add("id", Integer.toString(tagID));
-			params.add("tagGroupId", Integer.toString(tagGroupID));
-			params.add("points", Arrays.toString(postPoint));
-			params.add("color", Color.toString());
-			params.add("name", name);
+			query.addId(tagID);
 			
-			ClientResponse response = service.path(requestpath).accept(mediatype).put(ClientResponse.class,params);
+			ClientResponse response = service.path(requestpath).accept(mediatype).put(ClientResponse.class,query.getQuery());
 			System.out.println(response.toString());
 		}
 	
@@ -97,6 +91,43 @@ public class BioDIGAPI {
 		requestpath = "tags";
 		MultivaluedMap params = new MultivaluedMapImpl();
 		params.add("id", Integer.toString(id));
+		ClientResponse response = service.path(requestpath).queryParams(params).delete(ClientResponse.class);
+		System.out.println(response.toString());
+	}
+	
+	/*
+	 * geneLinks Methods
+	 */
+	
+	//Get request for TAG Api
+	public geneLinks getGLinks (int id){		
+		requestpath = "geneLinks";
+		MultivaluedMap params = new MultivaluedMapImpl();
+		params.add("id",Integer.toString(id));
+		
+		String info = (service.path(requestpath).queryParams(params).accept(mediatype).get(String.class));
+		//System.out.println(info.toString());
+		
+		Gson myGson = new Gson();
+		JsonParser jsonParser = new JsonParser();
+		JsonElement tagSelement= jsonParser.parse(info);
+		geneLinks newGene = myGson.fromJson(tagSelement, geneLinks.class);
+		return newGene;
+	}
+	
+	//Insert for TAG API
+	public void insertGLinks (TagQuery query) {
+		requestpath = "geneLinks";
+			
+			ClientResponse response = service.path(requestpath).accept(mediatype).post(ClientResponse.class,query.getQuery());
+			System.out.println(response.toString());
+		}
+	
+	//Delete request for TAG API
+	public void deleteGLinks(int geneId) {
+		requestpath = "geneLinks";
+		MultivaluedMap params = new MultivaluedMapImpl();
+		params.add("id", Integer.toString(geneId));
 		ClientResponse response = service.path(requestpath).queryParams(params).delete(ClientResponse.class);
 		System.out.println(response.toString());
 	}
